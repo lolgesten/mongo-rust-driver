@@ -33,7 +33,7 @@ pub struct CollectionOptions {
 /// [`Collection::find_one_and_replace`](../struct.Collection.html#method.find_one_and_replace) and
 /// [`Collection::find_one_and_update`](../struct.Collection.html#method.find_one_and_update)
 /// operation should return the document before or after modification.
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 pub enum ReturnDocument {
     /// Return the document after modification.
     After,
@@ -77,7 +77,8 @@ pub enum CursorType {
 
 /// Specifies the options to a
 /// [`Collection::insert_one`](../struct.Collection.html#method.insert_one) operation.
-#[derive(Clone, Debug, Default, TypedBuilder)]
+#[derive(Clone, Debug, Default, TypedBuilder, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct InsertOneOptions {
     /// Opt out of document-level validation.
     #[builder(default)]
@@ -161,7 +162,8 @@ impl From<Vec<Document>> for UpdateModifications {
 /// Specifies the options to a
 /// [`Collection::update_one`](../struct.Collection.html#method.update_one) or
 /// [`Collection::update_many`](../struct.Collection.html#method.update_many) operation.
-#[derive(Debug, Default, TypedBuilder)]
+#[derive(Debug, Default, TypedBuilder, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct UpdateOptions {
     /// A set of filters specifying to which array elements an update should apply.
     ///
@@ -212,7 +214,8 @@ impl UpdateOptions {
 
 /// Specifies the options to a
 /// [`Collection::replace_one`](../struct.Collection.html#method.replace_one) operation.
-#[derive(Debug, Default, TypedBuilder)]
+#[derive(Debug, Default, TypedBuilder, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ReplaceOptions {
     /// Opt out of document-level validation.
     #[builder(default)]
@@ -245,7 +248,7 @@ pub struct ReplaceOptions {
 /// [`Collection::delete_one`](../struct.Collection.html#method.delete_one) or
 /// [`Collection::delete_many`](../struct.Collection.html#method.delete_many) operation.
 #[serde_with::skip_serializing_none]
-#[derive(Debug, Default, TypedBuilder, Serialize)]
+#[derive(Debug, Default, TypedBuilder, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DeleteOptions {
     /// The collation to use for the operation.
@@ -263,7 +266,8 @@ pub struct DeleteOptions {
 /// Specifies the options to a
 /// [`Collection::find_one_and_delete`](../struct.Collection.html#method.find_one_and_delete)
 /// operation.
-#[derive(Debug, Default, TypedBuilder)]
+#[derive(Debug, Default, TypedBuilder, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FindOneAndDeleteOptions {
     /// The maximum amount of time to allow the query to run.
     ///
@@ -295,7 +299,8 @@ pub struct FindOneAndDeleteOptions {
 /// Specifies the options to a
 /// [`Collection::find_one_and_replace`](../struct.Collection.html#method.find_one_and_replace)
 /// operation.
-#[derive(Debug, Default, TypedBuilder)]
+#[derive(Debug, Default, TypedBuilder, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FindOneAndReplaceOptions {
     /// Opt out of document-level validation.
     #[builder(default)]
@@ -339,7 +344,8 @@ pub struct FindOneAndReplaceOptions {
 /// Specifies the options to a
 /// [`Collection::find_one_and_update`](../struct.Collection.html#method.find_one_and_update)
 /// operation.
-#[derive(Debug, Default, TypedBuilder)]
+#[derive(Debug, Default, TypedBuilder, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FindOneAndUpdateOptions {
     /// A set of filters specifying to which array elements an update should apply.
     ///
@@ -391,7 +397,7 @@ pub struct FindOneAndUpdateOptions {
 /// operation.
 #[skip_serializing_none]
 #[serde(rename_all = "camelCase")]
-#[derive(Clone, Debug, Default, TypedBuilder, Serialize)]
+#[derive(Clone, Debug, Default, TypedBuilder, Serialize, Deserialize)]
 pub struct AggregateOptions {
     /// Enables writing to temporary files. When set to true, aggregation stages can write data to
     /// the _tmp subdirectory in the dbPath directory.
@@ -472,7 +478,8 @@ pub struct AggregateOptions {
 
 /// Specifies the options to a
 /// [`Collection::count_documents`](../struct.Collection.html#method.count_documents) operation.
-#[derive(Debug, Default, TypedBuilder)]
+#[derive(Debug, Default, TypedBuilder, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CountOptions {
     /// The index to use for the operation.
     #[builder(default)]
@@ -509,7 +516,7 @@ pub struct CountOptions {
 ///  `Collection::estimated_document_count`
 /// ](../struct.Collection.html#method.estimated_document_count) operation.
 #[serde_with::skip_serializing_none]
-#[derive(Debug, Default, TypedBuilder, Serialize, Clone)]
+#[derive(Debug, Default, TypedBuilder, Serialize, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EstimatedDocumentCountOptions {
     /// The maximum amount of time to allow the query to run.
@@ -527,7 +534,7 @@ pub struct EstimatedDocumentCountOptions {
     ///
     /// If none specified, the default set on the collection will be used.
     #[builder(default)]
-    #[serde(skip_serializing)]
+    #[serde(skip)]
     pub selection_criteria: Option<SelectionCriteria>,
 
     /// The level of the read concern.
@@ -538,7 +545,7 @@ pub struct EstimatedDocumentCountOptions {
 /// Specifies the options to a [`Collection::distinct`](../struct.Collection.html#method.distinct)
 /// operation.
 #[serde_with::skip_serializing_none]
-#[derive(Debug, Default, TypedBuilder, Serialize, Clone)]
+#[derive(Debug, Default, TypedBuilder, Serialize, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DistinctOptions {
     /// The maximum amount of time to allow the query to run.
@@ -556,7 +563,7 @@ pub struct DistinctOptions {
     ///
     /// If none specified, the default set on the collection will be used.
     #[builder(default)]
-    #[serde(skip_serializing)]
+    #[serde(skip)]
     pub selection_criteria: Option<SelectionCriteria>,
 
     /// The level of the read concern.
@@ -574,7 +581,7 @@ pub struct DistinctOptions {
 /// Specifies the options to a [`Collection::find`](../struct.Collection.html#method.find)
 /// operation.
 #[skip_serializing_none]
-#[derive(Debug, Default, TypedBuilder, Serialize)]
+#[derive(Debug, Default, TypedBuilder, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FindOptions {
     /// If true, partial results will be returned from a mongos rather than an error being
@@ -733,7 +740,8 @@ where
 
 /// Specifies the options to a [`Collection::find_one`](../struct.Collection.html#method.find_one)
 /// operation.
-#[derive(Debug, Default, TypedBuilder)]
+#[derive(Debug, Default, TypedBuilder, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FindOneOptions {
     /// If true, partial results will be returned from a mongos rather than an error being
     /// returned if one or more shards is down.
@@ -796,6 +804,7 @@ pub struct FindOneOptions {
     ///
     /// If none specified, the default set on the collection will be used.
     #[builder(default)]
+    #[serde(skip)]
     pub selection_criteria: Option<SelectionCriteria>,
 
     /// Whether to return the record identifier for each document.

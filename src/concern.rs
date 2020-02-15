@@ -3,7 +3,7 @@
 use std::time::Duration;
 
 use bson::{bson, doc};
-use serde::{Serialize, Serializer};
+use serde::{Serialize, Deserialize, Serializer};
 use serde_with::skip_serializing_none;
 use typed_builder::TypedBuilder;
 
@@ -17,7 +17,7 @@ use crate::{
 ///
 /// See the documentation [here](https://docs.mongodb.com/manual/reference/read-concern/) for more
 /// information about read concerns.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize)]
 pub enum ReadConcern {
     /// See the specific documentation for this read concern level [here](https://docs.mongodb.com/manual/reference/read-concern-local/).
     Local,
@@ -72,7 +72,7 @@ impl Serialize for ReadConcern {
 /// See the documentation [here](https://docs.mongodb.com/manual/reference/write-concern/) for more
 /// information about write concerns.
 #[skip_serializing_none]
-#[derive(Clone, Debug, Default, PartialEq, TypedBuilder, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, TypedBuilder, Serialize, Deserialize)]
 pub struct WriteConcern {
     /// Requests acknowledgement that the operation has propagated to a specific number or variety
     /// of servers.
@@ -97,7 +97,7 @@ pub struct WriteConcern {
 }
 
 /// The type of the `w` field in a [`WriteConcern`](struct.WriteConcern.html).
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Deserialize)]
 pub enum Acknowledgment {
     /// Requires acknowledgement that the write has reached the specified number of nodes.
     Nodes(i32),
